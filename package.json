@@ -1,0 +1,39 @@
+{
+  "name": "hr-rest-api",
+  "version": "1.0.0",
+  "description": "HR Project",
+  "main": "index.js",
+  "scripts": {
+    "lint": "eslint .",
+    "start": "nodemon app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Umer Inayat",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "mongoose": "^5.11.9",
+    "nodemon": "^2.0.6"
+  },
+  "devDependencies": {
+    "eslint": "^7.16.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-plugin-import": "^2.22.1",
+    "mocha": "^8.2.1",
+    "should": "^13.2.3",
+    "sinon": "^9.2.2"
+  },
+  "nodemonConfig": {
+    "restartable": "rs",
+    "ignore": [
+      "node_modules/**/node_modules"
+    ],
+    "delay": "1000",
+    "env": {
+      "NODE_ENV": "development",
+      "PORT": 3001,
+      "DB_URL": "mongodb://localhost:27017/hr_db"
+    }
+  }
+}
