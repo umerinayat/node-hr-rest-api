@@ -18,8 +18,13 @@ const departmentRouter = require('./routes/api/hr/departmentRouter')(
   Department
 );
 
+// Designations
+const Designation = require('./models/hr/designationModel');
+const designationRouter = require('./routes/api/hr/designationRouter')(
+  Designation
+);
 
-app.use('/api', employeeRouter, departmentRouter);
+app.use('/api', employeeRouter, departmentRouter, designationRouter);
 
 const port = process.env.PORT || 3001;
 app.listen(port, console.log(`Server listening on port: ${port}`));

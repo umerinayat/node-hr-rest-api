@@ -5,7 +5,7 @@ const { Schema } = mongoose;
 const employeeModel = new Schema({
   name: { type: String },
   branch: { type: String },
-  department: { type: String },
+  department_id: { type: Number },
   designation: { type: String },
 });
 
