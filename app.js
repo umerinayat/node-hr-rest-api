@@ -8,6 +8,8 @@ app.use([bodyParser.urlencoded({ extended: true }), bodyParser.json()]);
 const url = process.env.DB_URL || 'mongodb://localhost:27017/hr_db';
 mongoose.connect(url);
 
+//----------------- HR --------------------
+
 // Emoloyees
 const Employee = require('./models/hr/employeeModel');
 const employeeRouter = require('./routes/api/hr/employeeRouter')(Employee);
@@ -28,7 +30,9 @@ const designationRouter = require('./routes/api/hr/designationRouter')(
   Designation
 );
 
-
+// --------------------- Assets ----------------------
+const Asset = require('./models/assets/Asset');
+const assetsRouter = require('./routes/api/assets/assetRouter')(Asset);
 
 app.use(
   '/api',

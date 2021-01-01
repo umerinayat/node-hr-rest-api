@@ -26,8 +26,8 @@ const bankDetail = new Schema({
 });
 
 const assetsDetail = new Schema({
-  name: { type: String },
-  description: { type: String },
+  title: { type: String },
+  reason: { type: String },
   assign_date: { type: Date },
   to_date: { type: Date },
   asset: { type: Schema.Types.ObjectId, ref: 'Asset' },
@@ -58,6 +58,7 @@ const employeeModel = new Schema({
   address: address,
   bank_detail: bankDetail,
   company_detail: companyDetail,
+  assets: [assetsDetail],
 });
 
 module.exports = mongoose.model('Employee', employeeModel);
