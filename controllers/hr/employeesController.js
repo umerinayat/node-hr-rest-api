@@ -16,7 +16,10 @@ function employeesController(Employee) {
         return res.send(err);
       }
       return res.json(employees);
-    });
+    })
+      .populate('company_detail.Department')
+      .populate('company_detail.Branch')
+      .populate('company_detail.Designation');
   }
 
   return { post, get };
