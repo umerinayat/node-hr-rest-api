@@ -1,10 +1,22 @@
 /* eslint-disable no-param-reassign */
 const express = require('express');
+const passport = require('passport');
 const employeesController = require('../../../controllers/hr/employeesController');
 
 function routes(Employee) {
   const employeeRouter = express.Router();
+  employeeRouter.use(passport.authenticate('jwt', { session: false }));
   const controller = employeesController(Employee);
+
+  employeeRouter.use('/employees', (req, res, next) => {
+    console.log(req.user);
+    if (req.user.isAdmin) {
+      next();
+    } else {
+      // authoriaztion
+      res.json({ msg: 'Not hr admin' });
+    }
+  });
 
   employeeRouter.route('/employees').post(controller.post).get(controller.get);
 

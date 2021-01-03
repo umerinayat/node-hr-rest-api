@@ -52,10 +52,9 @@ const companyDetail = new Schema({
 });
 
 // Parent Document
-
 const employeeModel = new Schema({
   personal_info: personalInfo,
-  address: address,
+  address,
   bank_detail: bankDetail,
   company_detail: companyDetail,
   assets: [assetsDetail],

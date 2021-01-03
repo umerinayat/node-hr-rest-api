@@ -59,7 +59,14 @@ function assetsController(Asset) {
     });
   }
 
-  return { post, show, get, put, patch, remove };
+  return {
+    post,
+    show,
+    get,
+    put,
+    patch,
+    remove,
+  };
 }
 
 module.exports = assetsController;

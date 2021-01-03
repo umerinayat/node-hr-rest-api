@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+const passport = require('passport');
 
 const app = express();
 app.use([bodyParser.urlencoded({ extended: true }), bodyParser.json()]);
@@ -8,7 +9,10 @@ app.use([bodyParser.urlencoded({ extended: true }), bodyParser.json()]);
 const url = process.env.DB_URL || 'mongodb://localhost:27017/hr_db';
 mongoose.connect(url);
 
-//----------------- HR --------------------
+const User = require('./models/User');
+const userRouter = require('./routes/api/users/userRouter')(User);
+
+//  ----------------- HR --------------------
 
 // Emoloyees
 const Employee = require('./models/hr/employeeModel');
@@ -34,12 +38,20 @@ const designationRouter = require('./routes/api/hr/designationRouter')(
 const Asset = require('./models/assets/Asset');
 const assetsRouter = require('./routes/api/assets/assetRouter')(Asset);
 
+app.use(passport.initialize());
+
+// Password Config
+require('./config/passport')(passport);
+
+// Protected Routes
 app.use(
   '/api',
+  userRouter,
   employeeRouter,
   departmentRouter,
   designationRouter,
-  branchRouter
+  branchRouter,
+  assetsRouter
 );
 
 const port = process.env.PORT || 3001;
