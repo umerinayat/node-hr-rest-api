@@ -1,9 +1,18 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const config = require('../../config/config');
+const validateRegisterInputs = require('../../validations/register');
+const validateLoginInputs = require('../../validations/login');
 
 function usersController(User) {
+  // Register new user
   function register(req, res) {
+    const { errors, isValid } = validateRegisterInputs(req.body);
+    // check Validation
+    if (!isValid) {
+      return res.status(400).json(errors);
+    }
+
     const { email, password, isAdmin } = req.body;
     const avatar = 'https://via.placeholder.com/150';
 
@@ -13,8 +22,9 @@ function usersController(User) {
       }
 
       if (user) {
+        errors.email = 'Email Already exisits';
         return res.status(400).json({
-          email: 'Email already existis',
+          errors,
         });
       }
       // Register new user
@@ -43,7 +53,14 @@ function usersController(User) {
     });
   }
 
+  // Login user with jwt token
   function login(req, res) {
+    const { errors, isValid } = validateLoginInputs(req.body);
+
+    if (!isValid) {
+      return res.status(400).json(errors);
+    }
+
     const { email, password } = req.body;
 
     User.findOne({ email }, (err, user) => {
@@ -52,7 +69,8 @@ function usersController(User) {
       }
 
       if (!user) {
-        return res.status(404).json({ email: 'User not found' });
+        errors.email = 'User not found';
+        return res.status(404).json(errors);
       }
 
       // check password
@@ -85,7 +103,8 @@ function usersController(User) {
             }
           );
         } else {
-          return res.status(400).json({ password: 'Password incorrect' });
+          errors.password = 'Password incorrect';
+          return res.status(400).json(errors);
         }
       });
     });

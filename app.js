@@ -2,9 +2,10 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const passport = require('passport');
+const cors = require('cors');
 
 const app = express();
-app.use([bodyParser.urlencoded({ extended: true }), bodyParser.json()]);
+app.use([cors(), bodyParser.urlencoded({ extended: true }), bodyParser.json()]);
 
 const url = process.env.DB_URL || 'mongodb://localhost:27017/hr_db';
 mongoose.connect(url);
