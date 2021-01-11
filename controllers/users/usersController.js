@@ -46,7 +46,15 @@ function usersController(User) {
             if (err) {
               return res.send(err);
             }
-            return res.status(201).json(registerdUser);
+            return res.status(201).json(
+              {
+                "_id": registerdUser._id,
+                "isAdmin": registerdUser.isAdmin,
+                "date": registerdUser.date,
+                "email": registerdUser.email,
+                "avatar": "https://via.placeholder.com/150",
+              }
+            );
           });
         });
       });

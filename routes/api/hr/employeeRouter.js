@@ -39,10 +39,11 @@ function routes(Employee) {
     .get((req, res) => res.json(req.employee))
     .put((req, res) => {
       const { employee } = req;
-      employee.name = req.body.name;
-      employee.branch = req.body.branch;
-      employee.department = req.body.department;
-      employee.designation = req.body.designation;
+      employee.personal_info = req.body.personal_info;
+      employee.address = req.body.address;
+      employee.bank_detail = req.body.bank_detail;
+      employee.company_detail = req.body.company_detail;
+      employee.assets = req.body.assets;
       req.employee.save((err) => {
         if (err) {
           return req.send(err);
