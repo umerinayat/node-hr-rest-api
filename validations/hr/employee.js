@@ -15,23 +15,16 @@ function validateEmployeeInputs(data) {
 
   
   if (Validator.isEmpty(data.personal_info)) {
-    errors.personal_info = 'Employee personal information is requried';
+    errors.personal_info = 'Employee personal information is requried.';
   }
 
-  if (!Validator.isLength(data.password, { min: 8, max: 50 })) {
-    errors.password = 'Password must be at least 8 characters';
+  
+  if (Validator.isEmpty(data.address)) {
+    errors.address = 'Employee address information is required.';
   }
 
-  if (Validator.isEmpty(data.password)) {
-    errors.password = 'Password field is required';
-  }
-
-  if (!Validator.equals(data.password, data.confirm_password)) {
-    errors.confirm_password = 'Passwords must match';
-  }
-
-  if (Validator.isEmpty(data.confirm_password)) {
-    errors.confirm_password = 'Confirm password field is required';
+  if (Validator.isEmpty(data.company_detail)) {
+    errors.company_detail = 'Company detail information is required';
   }
 
   return {
