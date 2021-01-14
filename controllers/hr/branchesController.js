@@ -1,8 +1,32 @@
+const validateBranchInputs = require('../../validations/hr/branch');
+
 function branchesController(Branch) {
   function post(req, res) {
-    const branch = new Branch(req.body);
-    branch.save();
-    return res.status(201).json(branch);
+    const {errors, isValid} = validateBranchInputs(req.body);
+    // Validation check
+    if (!isValid) {
+      return res.status(400).json(errors);
+    }
+
+    // check if branch is alreay there
+    Branch.findOne({name: req.body.name}, (err, branch) => {
+      if(err) {
+        return res.send(err);
+      }
+
+      if (branch) {
+        errors.name = 'Branch name already exists';
+        return res.status(400).json(
+          errors,
+        );
+      }
+
+        const newBranch = new Branch(req.body);
+        newBranch.save();
+        return res.status(201).json(newBranch);
+
+    });
+
   }
 
   function get(req, res) {
@@ -20,14 +44,36 @@ function branchesController(Branch) {
   }
 
   function put(req, res) {
+    const {errors, isValid} = validateBranchInputs(req.body);
+    // Validation check
+     if (!isValid) {
+      return res.status(400).json(errors);
+    }
     const { branch } = req;
-    branch.name = req.body.name;
-    branch.save((err) => {
+
+    Branch.findOne({name: req.body.name}, (err, b) => {
       if (err) {
-        return req.send(err);
+        return res.send(err);
       }
-      return res.json(branch);
+
+      if (b && req.params.id !== b.id) {
+        errors.name = 'Branch name already exists';
+        return res.status(400).json(
+          errors,
+        );
+      }
+
+      branch.name = req.body.name;
+      branch.save((err) => {
+        if (err) {
+          return req.send(err);
+        }
+        return res.json(branch);
+      });
+
     });
+
+   
   }
 
   function patch(req, res) {

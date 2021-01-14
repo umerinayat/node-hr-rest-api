@@ -40,19 +40,27 @@ const companyDetail = new Schema({
   Branch: {
     type: Schema.Types.ObjectId,
     ref: 'Branch',
+    required: true,
   },
   Department: {
     type: Schema.Types.ObjectId,
     ref: 'Department',
+    required: true,
   },
   Designation: {
     type: Schema.Types.ObjectId,
     ref: 'Designation',
+    required: true,
   },
 });
 
 // Parent Document
 const employeeModel = new Schema({
+  User: {
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+    required: true,
+  },
   personal_info: personalInfo,
   address,
   bank_detail: bankDetail,

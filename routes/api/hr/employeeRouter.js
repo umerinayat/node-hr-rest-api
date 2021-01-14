@@ -2,21 +2,22 @@
 const express = require('express');
 const passport = require('passport');
 const employeesController = require('../../../controllers/hr/employeesController');
+const validateEmployeeInputs = require('../../../validations/hr/employee');
 
-function routes(Employee) {
+function routes(User, Employee) {
   const employeeRouter = express.Router();
-  employeeRouter.use(passport.authenticate('jwt', { session: false }));
-  const controller = employeesController(Employee);
+  //employeeRouter.use(passport.authenticate('jwt', { session: false }));
+  const controller = employeesController(User, Employee);
 
-  employeeRouter.use('/employees', (req, res, next) => {
-    console.log(req.user);
-    if (req.user.isAdmin) {
-      next();
-    } else {
-      // authoriaztion
-      res.json({ msg: 'Not hr admin' });
-    }
-  });
+  // employeeRouter.use('/employees', (req, res, next) => {
+  //   console.log(req.user);
+  //   if (req.user.isAdmin) {
+  //     next();
+  //   } else {
+  //     // authoriaztion
+  //     res.json({ msg: 'Not hr admin' });
+  //   }
+  // });
 
   employeeRouter.route('/employees').post(controller.post).get(controller.get);
 
@@ -38,6 +39,11 @@ function routes(Employee) {
     .route('/employees/:id')
     .get((req, res) => res.json(req.employee))
     .put((req, res) => {
+     const {errors, isValid} = validateEmployeeInputs(req.body);
+      // Validation check
+       if (!isValid) {
+        return res.status(400).json(errors);
+      }
       const { employee } = req;
       employee.personal_info = req.body.personal_info;
       employee.address = req.body.address;
@@ -46,7 +52,7 @@ function routes(Employee) {
       employee.assets = req.body.assets;
       req.employee.save((err) => {
         if (err) {
-          return req.send(err);
+          return res.send(err);
         }
         return res.json(req.employee);
       });
@@ -65,7 +71,7 @@ function routes(Employee) {
       });
       req.employee.save((err) => {
         if (err) {
-          return req.send(err);
+          return res.send(err);
         }
         return res.json(req.employee);
       });
@@ -73,7 +79,7 @@ function routes(Employee) {
     .delete((req, res) => {
       req.employee.remove((err) => {
         if (err) {
-          return req.send(err);
+          return res.send(err);
         }
         return res.sendStatus(204);
       });

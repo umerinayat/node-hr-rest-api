@@ -22,7 +22,7 @@ function usersController(User) {
       }
 
       if (user) {
-        errors.email = 'Email Already exisits';
+        errors.email = 'Email already exists';
         return res.status(400).json({
           errors,
         });

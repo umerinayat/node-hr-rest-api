@@ -1,8 +1,33 @@
+const validateDeparmentInputs = require('../../validations/hr/department');
+
 function departmentsController(Department) {
   function post(req, res) {
-    const department = new Department(req.body);
-    department.save();
-    return res.status(201).json(department);
+    const {errors, isValid} = validateDeparmentInputs(req.body);
+    // Validation check
+     if (!isValid) {
+      return res.status(400).json(errors);
+    }
+
+     // check if Department is already there
+     Department.findOne({name: req.body.name}, (err, d) => {
+      if(err) {
+        return res.send(err);
+      }
+
+      if (d) {
+        errors.name = 'Department name already exists';
+        return res.status(400).json(
+          errors,
+        );
+      }
+
+      const department = new Department(req.body);
+      department.save();
+      return res.status(201).json(department);
+
+    });
+    
+   
   }
 
   function get(req, res) {
@@ -20,14 +45,36 @@ function departmentsController(Department) {
   }
 
   function put(req, res) {
+    const {errors, isValid} = validateDeparmentInputs(req.body);
+    // Validation check
+     if (!isValid) {
+      return res.status(400).json(errors);
+    }
     const { department } = req;
-    department.name = req.body.name;
-    req.department.save((err) => {
-      if (err) {
-        return req.send(err);
+
+    // check if Department is already there
+    Department.findOne({name: req.body.name}, (err, d) => {
+      if(err) {
+        return res.send(err);
       }
-      return res.json(department);
+
+      if (d && req.params.id !== d.id) {
+        errors.name = 'Department name already exists';
+        return res.status(400).json(
+          errors,
+        );
+      }
+
+      department.name = req.body.name;
+      req.department.save((err) => {
+        if (err) {
+          return req.send(err);
+        }
+        return res.json(department);
+      });
+
     });
+
   }
 
   function patch(req, res) {

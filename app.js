@@ -17,7 +17,7 @@ const userRouter = require('./routes/api/users/userRouter')(User);
 
 // Emoloyees
 const Employee = require('./models/hr/employeeModel');
-const employeeRouter = require('./routes/api/hr/employeeRouter')(Employee);
+const employeeRouter = require('./routes/api/hr/employeeRouter')(User, Employee);
 
 // Departments
 const Department = require('./models/hr/departmentModel');
@@ -48,11 +48,12 @@ require('./config/passport')(passport);
 app.use(
   '/api',
   userRouter,
+ // passport.authenticate('jwt', { session: false }),
   employeeRouter,
   departmentRouter,
   designationRouter,
   branchRouter,
-  assetsRouter
+  assetsRouter,
 );
 
 const port = process.env.PORT || 3001;
