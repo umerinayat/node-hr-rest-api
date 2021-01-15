@@ -69,7 +69,7 @@ function employeesController(User, Employee) {
       }
       return res.json(employees);
     })
-      .populate('User')
+      .populate('User', '_id email avatar date')
       .populate('company_detail.Department')
       .populate('company_detail.Branch')
       .populate('company_detail.Designation');

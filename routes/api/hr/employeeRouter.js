@@ -3,6 +3,9 @@ const express = require('express');
 const passport = require('passport');
 const employeesController = require('../../../controllers/hr/employeesController');
 const validateEmployeeInputs = require('../../../validations/hr/employee');
+const multer = require('multer');
+const storage = require('../../../config/storage');
+const path = require('path');
 
 function routes(User, Employee) {
   const employeeRouter = express.Router();
@@ -18,6 +21,76 @@ function routes(User, Employee) {
   //     res.json({ msg: 'Not hr admin' });
   //   }
   // });
+
+  // single image upload
+
+  function checkFileType(file, cb) {
+    // Allowed ext
+    const filetypes = /jpeg|jpg|png|gif/;
+    // Check ext
+    const extname = filetypes.test(
+      path.extname(file.originalname).toLowerCase()
+    );
+    // Check mime
+    const mimetype = filetypes.test(file.mimetype);
+
+    if (mimetype && extname) {
+      return cb(null, true);
+    } else {
+      cb(null, false);
+      return cb(new Error('Only .png, .jpg and .jpeg format allowed!'));
+    }
+  }
+
+  
+  const employeeImageUpload = multer({
+    storage: storage,
+    //limits: {
+      //fields: 5,
+      //fieldNameSize: 50, // TODO: Check if this size is enough
+      //fieldSize: 20000, //TODO: Check if this size is enough
+      // TODO: Change this line after compression
+      //fileSize: 15000000, // 150 KB for a 1080x1080 JPG 90
+    //},
+    fileFilter: function (_req, file, cb) {
+      checkFileType(file, cb);
+    },
+  });
+
+  // Employee image upload
+  employeeRouter.post('/employees/save-image', (req, res, next) => {
+    const upload = employeeImageUpload.single('image');
+    upload(req, res, (err) => {
+      if(err) {
+        console.log(err.message);
+        return res.status(400).json({
+          errors: {
+            message: err.message
+          } 
+        })
+      }
+
+      console.log(req.file);
+      console.log(req.file.path);
+
+      if (!req.file) {
+        res.status(500);
+        return next('Problem in image uploading');
+      }
+
+      req.image = {
+        filePath: req.file.path,
+        filename: req.file.filename,
+        fileUrl: 'url/' + req.file.filename,
+      };
+      next()
+    });
+
+  });
+  
+  employeeRouter.post('/employees/save-image', (req, res) => {
+    return res.json(req.image);
+  });
 
   employeeRouter.route('/employees').post(controller.post).get(controller.get);
 
@@ -39,9 +112,9 @@ function routes(User, Employee) {
     .route('/employees/:id')
     .get((req, res) => res.json(req.employee))
     .put((req, res) => {
-     const {errors, isValid} = validateEmployeeInputs(req.body);
+      const { errors, isValid } = validateEmployeeInputs(req.body);
       // Validation check
-       if (!isValid) {
+      if (!isValid) {
         return res.status(400).json(errors);
       }
       const { employee } = req;
