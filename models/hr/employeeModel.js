@@ -33,6 +33,11 @@ const assetsDetail = new Schema({
   asset: { type: Schema.Types.ObjectId, ref: 'Asset' },
 });
 
+
+const attachmentsDetail = new Schema({
+  attachment: { type: Schema.Types.ObjectId, ref: 'Attachment' },
+});
+
 const companyDetail = new Schema({
   employee_id: { type: String },
   date_of_joining: { type: Date },
@@ -66,6 +71,7 @@ const employeeModel = new Schema({
   bank_detail: bankDetail,
   company_detail: companyDetail,
   assets: [assetsDetail],
+  attachments: [attachmentsDetail]
 });
 
 module.exports = mongoose.model('Employee', employeeModel);

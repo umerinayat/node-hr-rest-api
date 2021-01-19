@@ -35,6 +35,13 @@ const designationRouter = require('./routes/api/hr/designationRouter')(
   Designation
 );
 
+
+// Attachments
+const Attachment = require('./models/hr/attachment');
+const attachmentRouter = require('./routes/api/hr/attachmentRouter')(
+  Attachment
+);
+
 // --------------------- Assets ----------------------
 const Asset = require('./models/assets/Asset');
 const assetsRouter = require('./routes/api/assets/assetRouter')(Asset);
@@ -54,6 +61,7 @@ app.use(
   designationRouter,
   branchRouter,
   assetsRouter,
+  attachmentRouter,
 );
 
 const port = process.env.PORT || 3001;
