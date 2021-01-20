@@ -4,7 +4,7 @@ const passport = require('passport');
 const employeesController = require('../../../controllers/hr/employeesController');
 const validateEmployeeInputs = require('../../../validations/hr/employee');
 const multer = require('multer');
-const storage = require('../../../config/storage');
+const storage = require('../../../config/storage').storage;
 const path = require('path');
 
 function routes(User, Employee) {
@@ -21,6 +21,8 @@ function routes(User, Employee) {
   //     res.json({ msg: 'Not hr admin' });
   //   }
   // });
+
+
 
   // single image upload
 
@@ -59,6 +61,7 @@ function routes(User, Employee) {
 
   // Employee image upload
   employeeRouter.post('/employees/save-image', (req, res, next) => {
+
     const upload = employeeImageUpload.single('image');
     upload(req, res, (err) => {
       if(err) {
@@ -92,7 +95,17 @@ function routes(User, Employee) {
     return res.json(req.image);
   });
 
-  employeeRouter.route('/employees').post(controller.post).get(controller.get);
+  
+
+  employeeRouter.route('/employees')
+  .post(controller.post)
+  .get(controller.get);
+
+
+  employeeRouter.route('/employees/save-attachments')
+  .post(controller.saveAttachments);
+
+
 
   // middleware
   employeeRouter.use('/employees/:id', (req, res, next) => {

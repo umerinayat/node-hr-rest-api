@@ -1,5 +1,6 @@
 const validateAttachmentInputs = require('../../validations/hr/attachment');
 
+
 function attachmentsController(Attachment, attachmentRepo) {
 
   function post(req, res) {
@@ -8,7 +9,8 @@ function attachmentsController(Attachment, attachmentRepo) {
     // if (!isValid) {
     //   return res.status(400).json(errors);
     // }
-    attachmentRepo.create(req.body, function(err, isAlreadyExists, newAttachment) {
+    console.log(req.body)
+    attachmentRepo.create( { req }, function(err, isAlreadyExists, newAttachment) {
       if(err) {
         return res.send(err);
       }
@@ -19,6 +21,7 @@ function attachmentsController(Attachment, attachmentRepo) {
           errors,
         );
       }
+      console.log(newAttachment)
       if (newAttachment) {
         return res.status(201).json(newAttachment);
       } 

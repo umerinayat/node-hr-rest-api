@@ -1,7 +1,10 @@
 const bcrypt = require('bcryptjs');
 const validateEmployeeInputs = require('../../validations/hr/employee');
+const attachmentRepo = require('../../repositories/hr/attachmentRepo');
 
 function employeesController(User, Employee) {
+  
+  // store new employee info
   function post(req, res) {
     const {errors, isValid} = validateEmployeeInputs(req.body);
     // Validation check
@@ -56,6 +59,13 @@ function employeesController(User, Employee) {
 
     
   }
+  
+  // store employee attachments
+  function saveAttachments(req, res) {
+    attachmentRepo.create(req, function(err, attachment) {
+      
+    });
+  }
 
   function get(req, res) {
     // const { query } = req;
@@ -75,7 +85,7 @@ function employeesController(User, Employee) {
       .populate('company_detail.Designation');
   }
 
-  return { post, get };
+  return { post, get, saveAttachments };
 }
 
 module.exports = employeesController;
