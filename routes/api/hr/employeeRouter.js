@@ -6,6 +6,7 @@ const validateEmployeeInputs = require('../../../validations/hr/employee');
 const multer = require('multer');
 const storage = require('../../../config/storage').storage;
 const path = require('path');
+const { json } = require('body-parser');
 
 function routes(User, Employee) {
   const employeeRouter = express.Router();
@@ -118,7 +119,11 @@ function routes(User, Employee) {
         return next();
       }
       return res.sendStatus(404);
-    });
+    })
+    .populate('User', '_id email avatar date')
+    .populate('company_detail.Department')
+    .populate('company_detail.Branch')
+    .populate('company_detail.Designation');;
   });
 
   employeeRouter
@@ -167,7 +172,9 @@ function routes(User, Employee) {
         if (err) {
           return res.send(err);
         }
-        return res.sendStatus(204);
+        return res.status(204).json({
+          message: "Successfully deleted!"
+        });
       });
     });
 

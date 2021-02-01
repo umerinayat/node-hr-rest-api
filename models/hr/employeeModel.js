@@ -15,13 +15,13 @@ const address = new Schema({
   address: { type: String },
   city: { type: String },
   zip_code: { type: String },
-  province: { type: String },
+  state: { type: String },
   country: { type: String },
 });
 
 const bankDetail = new Schema({
   bank_name: { type: String },
-  acount_holder_name: { type: String },
+  account_holder_name: { type: String },
   account_no: { type: String },
 });
 
@@ -67,7 +67,7 @@ const employeeModel = new Schema({
     required: true,
   },
   personal_info: personalInfo,
-  address,
+  address_detail: address,
   bank_detail: bankDetail,
   company_detail: companyDetail,
   assets: [assetsDetail],

@@ -60,7 +60,7 @@ require('./config/passport')(passport);
 app.use(
   '/api',
   userRouter,
- // passport.authenticate('jwt', { session: false }),
+  passport.authenticate('jwt', { session: false }),
   employeeRouter,
   departmentRouter,
   designationRouter,

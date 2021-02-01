@@ -45,16 +45,18 @@ function employeesController(User, Employee) {
             if (err) {
               return res.send(err);
             }
+
+               // create employee
+              const employee = new Employee(req.body);
+              employee.User = newUser._id;
+              employee.save();
+              return res.status(201).json(employee);
            
           });
         });
       });
 
-      // create employee
-      const employee = new Employee(req.body);
-      employee.User = newUser._id;
-      employee.save();
-      return res.status(201).json(employee);
+   
     });
 
     
